@@ -1,4 +1,4 @@
-const User = require("../models/User");
+const User = require("../Models/user");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const dotenv = require("dotenv");
@@ -7,8 +7,7 @@ dotenv.config();
 
 exports.postSignupController = async (req, res) => {
     try {
-        const { name, registrationNumber, watsappNumber, email, password , confirmPassword } = req.body;
-       
+        const { name, registrationNumber, watsappNumber, email, password , confirmPassword ,role } = req.body;
         if (password !== confirmPassword) {
             return res.status(400).json({ message: "Passwords do not match" });
         }
@@ -42,6 +41,7 @@ exports.postSignupController = async (req, res) => {
             watsappNumber,
             email,
             password: hashedPassword,
+            role
         });
 
         await newUser.save();
@@ -62,12 +62,13 @@ exports.postSignupController = async (req, res) => {
         res.status(201).json({
             success: true,
             message: "User registered successfully",
-            data: {
+            user: {
                 userId: newUser._id,
                 name: newUser.name,
                 registrationNumber: newUser.registrationNumber,
                 watsappNumber: newUser.watsappNumber,
                 email: newUser.email,
+                role : newUser.role,
             },
         });
     } catch (error) {
@@ -164,7 +165,6 @@ exports.getMeController = async (req, res) => {
 
     // find user without password , exclude password field
     const user = await User.findById(decoded.userId).select("-password");
-    console.log(user)
     if (!user) {
       return res.status(400).json({ success: false, message: "User not found" });
     }

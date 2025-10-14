@@ -3,7 +3,7 @@ const Paper = require('../Models/paper')
 exports.postPaperController = async (req, res) => {
     try {
         const { instructorName,examType, courseName,courseCode, semester , uploader } = req.body;
-        console.log(instructorName,examType, courseName,courseCode, semester , uploader)
+      
         const paperData = new Paper({
             instructorName,
             examType,
