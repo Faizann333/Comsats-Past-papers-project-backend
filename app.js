@@ -10,8 +10,6 @@ const {routes}  = require('./Routes/index');
 
 const app = express();
 
-
-
 app.use(express.json());
 
 const allowedOrigins = [
@@ -19,19 +17,25 @@ const allowedOrigins = [
 ];
 app.use(cors({
   origin: allowedOrigins,  // your frontend
-  credentials: true,                // allow cookies
+  credentials: true,       // allow cookies
 }));
+
+// Handle preflight OPTIONS requests for all routes
+app.options('*', cors({
+  origin: allowedOrigins,
+  credentials: true,
+}));
+
 app.use(cookieParser());
 
 routes(app);
-
 
 const PORT = process.env.PORT;
 mongoose.connect(process.env.MONGO_DB_URL).then(()=>{
   console.log("Connected to MongoDB successfully");
   app.listen(PORT, () => {
-  console.log(`Server is running on port http://localhost:${PORT}`)
-})
+    console.log(`Server is running on port http://localhost:${PORT}`)
+  })
 }).catch((err)=>{
   console.error("Error connecting to MongoDB", err);
 })
