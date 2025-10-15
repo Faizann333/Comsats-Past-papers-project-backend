@@ -10,9 +10,15 @@ const {routes}  = require('./Routes/index');
 
 const app = express();
 
+
+
 app.use(express.json());
+
+const allowedOrigins = [
+  'https://pastpaperportal.vercel.app'
+];
 app.use(cors({
-  origin: "http://localhost:5173",  // your frontend
+  origin: allowedOrigins,  // your frontend
   credentials: true,                // allow cookies
 }));
 app.use(cookieParser());
