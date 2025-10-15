@@ -10,7 +10,7 @@ const { routes } = require('./Routes/index');
 
 const app = express();
 
-app.use(express.json());
+
 
 const allowedOrigins = [
   'https://pastpaperportal.vercel.app'
@@ -27,6 +27,7 @@ app.use(cors({
   credentials: true,
 }));
 
+app.use(express.json());
 app.use(cookieParser());
 
 routes(app);
