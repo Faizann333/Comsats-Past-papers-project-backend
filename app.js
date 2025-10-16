@@ -25,12 +25,25 @@ app.use(cors({
     }
   },
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],  // Allowed HTTP methods
+  allowedHeaders: ['Content-Type', 'Authorization'],  // Allowed headers
   credentials: true,  // Allow cookies and credentials
+  optionsSuccessStatus: 200,  // For legacy browsers (IE11, various SmartTVs)
 }));
+
+// Handle preflight OPTIONS requests for CORS (preflight handling for all routes)
+app.options('*', (req, res) => {
+  // Set CORS headers manually for OPTIONS request
+  res.setHeader('Access-Control-Allow-Origin', 'https://pastpaperportal.vercel.app'); // Set your allowed origin here
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');  // Allowed methods
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization'); // Allowed headers
+  res.setHeader('Access-Control-Allow-Credentials', 'true'); // Allow credentials
+  res.status(200).end();  // Respond to OPTIONS request with status 200
+});
 
 app.use(express.json());
 app.use(cookieParser());
 
+// Your routes
 routes(app);
 
 const PORT = process.env.PORT;
