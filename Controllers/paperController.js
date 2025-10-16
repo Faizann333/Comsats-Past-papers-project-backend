@@ -33,7 +33,7 @@ exports.postPaperController = async (req, res) => {
 
 exports.getPapersController = async (req, res) => {
     try{
-        const papers = await Paper.find().sort({ createdAt: -1 });
+        const papers = await Paper.find({status: 'approved' }).sort({ createdAt: -1 });
         res.status(200).json({
             success: true,
             message: "Papers fetched successfully",
@@ -48,6 +48,9 @@ exports.getPapersController = async (req, res) => {
         });
     }
 }
+
+
+//not used yet 
 
 exports.postFileController = async (req, res) => {
     try {
