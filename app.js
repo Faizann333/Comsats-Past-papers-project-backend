@@ -5,26 +5,15 @@ const cors = require('cors');
 const cookieParser = require('cookie-parser');
 dotenv.config();
 
-//external modules
+// External modules
 const { routes } = require('./Routes/index');
 
 const app = express();
 
-
-
-const allowedOrigins = [
-  'https://pastpaperportal.vercel.app'
-];
-
+//  Allow all origins (note: credentials still allowed)
 app.use(cors({
-  origin: function (origin, callback) {
-    if (!origin || allowedOrigins.includes(origin)) {
-      callback(null, true);
-    } else {
-      callback(new Error('Not allowed by CORS'));
-    }
-  },
-  credentials: true,
+  origin: true,          // Reflects the request origin (for CORS with credentials)
+  credentials: true,     // Allow cookies and credentials
 }));
 
 app.use(express.json());
