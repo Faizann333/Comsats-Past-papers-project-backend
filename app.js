@@ -1,7 +1,7 @@
 const express = require('express');
 const dotenv = require('dotenv');
 const mongoose = require('mongoose');
-const cors = require('cors'); 
+const cors = require('cors');
 const cookieParser = require('cookie-parser');
 dotenv.config();
 
@@ -10,10 +10,22 @@ const { routes } = require('./Routes/index');
 
 const app = express();
 
-//  Allow all origins (note: credentials still allowed)
+// Define allowed origins
+const allowedOrigins = [
+  'https://pastpaperportal.vercel.app',  // Replace with your frontend URL
+];
+
+// CORS configuration
 app.use(cors({
-  origin: true,          // Reflects the request origin (for CORS with credentials)
-  credentials: true,     // Allow cookies and credentials
+  origin: (origin, callback) => {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);  // Allow the request
+    } else {
+      callback(new Error('Not allowed by CORS'));  // Block the request
+    }
+  },
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],  // Allowed HTTP methods
+  credentials: true,  // Allow cookies and credentials
 }));
 
 app.use(express.json());
