@@ -18,6 +18,7 @@ const allowedOrigins = [
 // CORS configuration
 app.use(cors({
   origin: (origin, callback) => {
+    // If no origin (i.e., during local requests), allow it
     if (!origin || allowedOrigins.includes(origin)) {
       callback(null, true);  // Allow the request
     } else {
@@ -30,14 +31,16 @@ app.use(cors({
   optionsSuccessStatus: 200,  // For legacy browsers (IE11, various SmartTVs)
 }));
 
-// Handle preflight OPTIONS requests for CORS (preflight handling for all routes)
-app.options('*', (req, res) => {
-  // Set CORS headers manually for OPTIONS request
-  res.setHeader('Access-Control-Allow-Origin', 'https://pastpaperportal.vercel.app'); // Set your allowed origin here
-  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');  // Allowed methods
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization'); // Allowed headers
-  res.setHeader('Access-Control-Allow-Credentials', 'true'); // Allow credentials
-  res.status(200).end();  // Respond to OPTIONS request with status 200
+// Automatically handle preflight OPTIONS requests (no need to define `app.options('*', ...)`)
+app.use((req, res, next) => {
+  if (req.method === 'OPTIONS') {
+    res.setHeader('Access-Control-Allow-Origin', 'https://pastpaperportal.vercel.app'); // Your frontend URL
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+    res.setHeader('Access-Control-Allow-Credentials', 'true');
+    return res.status(200).end();  // Respond with a 200 status for OPTIONS requests
+  }
+  next();
 });
 
 app.use(express.json());
