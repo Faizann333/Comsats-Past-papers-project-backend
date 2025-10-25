@@ -16,7 +16,7 @@ const paperSchema = new mongoose.Schema(
         },
         courseCode: {
             type: String,
-            required: true,
+            required: false,
         },
         semester: {
             type: String,

@@ -6,7 +6,7 @@ const adminRoute = require('./adminRoute')
 function routes(app) {
     app.use('/user',userRoute);
     app.use("/auth", authRoute);
-    app.use('/api/admin',adminRoute)
+    app.use('api/admin',adminRoute)
 }
 module.exports = {routes};
 
